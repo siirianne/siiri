@@ -2,59 +2,124 @@
 <html lang="fi">
 <head>
     <meta charset="UTF-8">
-    <title>Mirvan paluulaskuri</title>
+    <title>Kesätyölaskuri</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background: #f0f8ff;
+            background: #fffdf7;
             margin: 0;
             padding: 40px 20px;
         }
         h1 {
-            font-size: 1.5em;
+            font-size: 1.6em;
             color: #333;
         }
         #daysLeft {
             font-size: 4em;
-            color: #2c7be5;
+            color: #ff4081;
             margin: 20px 0;
         }
-        p {
+        #quote {
             font-size: 1.2em;
-            color: #555;
+            color: #444;
+            margin-top: 20px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
-    <h1>Mirvan paluuseen on jäljellä</h1>
+    <h1>Kesätöitä jäljellä</h1>
     <div id="daysLeft"></div>
-    <p>päivää</p>
+    <p>arkipäivää</p>
+    <div id="quote"></div>
 
     <script>
+        const targetDate = new Date(2025, 8, 30); // 30.9.2025
+
+        // 27 erilaista lausetta (yksi per arkipäivä)
+        const quotes = [
+            "Day 1: TikTokin POV: sä oot matkalla kohti vapautta.",
+            "Day 2: Excel ei oo ikinä näin ärsyttävä, mutta sä oot vahvempi.",
+            "Day 3: 'Work hard, play hard' – kohta se on play hard only.",
+            "Day 4: Kahvi + sinä = unelma-tiimi.",
+            "Day 5: Dua Lipa sanoi: 'Don’t stop now' – älä pysähdy!",
+            "Day 6: Fridays hits different, mutta tänään mennään!",
+            "Day 7: JVG laulaa, sä bailaat kohta lomalle.",
+            "Day 8: 'Delulu is the solulu' – kyllä se toimii täälläkin.",
+            "Day 9: Palkkapäivä lähestyy nopeammin kuin uskot.",
+            "Day 10: Tänään on hyvä päivä tehdä vähemmän ja näyttää kiireiseltä 😅",
+            "Day 11: Oot jo puolivälissä – GG!",
+            "Day 12: Pieni hymy Teamsissa, iso ero fiiliksessä.",
+            "Day 13: Kohta oot vapaa kuin kesän viimeinen lokki 🕊️",
+            "Day 14: Anna mennä – 'full send' loppuun asti!",
+            "Day 15: Kahvihuoneen juorut on se, mikä pitää sut hengissä.",
+            "Day 16: Älä stressaa, sä oot jo voittanut tän pelin.",
+            "Day 17: TikTok-sound: 'I’m just a baby!' – sama fiilis töissäkin.",
+            "Day 18: Sun työpanos > 1000 AI-työkalua 🤖",
+            "Day 19: Lounas = päivän kohokohta, nauti!",
+            "Day 20: Jos Beyonce voi, niin säkin voit.",
+            "Day 21: Viimeiset viikot menee nopeammin kuin Insta-storyt.",
+            "Day 22: Muista: kahvi on veronalaista etua ☕",
+            "Day 23: Olet lähempänä maalia kuin aloitusta.",
+            "Day 24: 'It’s giving… soon holiday vibes ✨'",
+            "Day 25: Älä unohda juhlia pieniä voittoja tänäänkin.",
+            "Day 26: Kohta kuuluu vain: 'kesätyöt? never heard of them'.",
+            "Day 27: Viimeinen päivä – GG WP, you did it! 🏆"
+        ];
+
+        // Laskee arkipäivien määrän
+        function countWeekdaysUntil(endDate) {
+            let today = new Date();
+            today.setHours(0,0,0,0);
+
+            let days = 0;
+            let current = new Date(today);
+
+            while (current <= endDate) {
+                const day = current.getDay();
+                if (day >= 1 && day <= 5) {
+                    days++;
+                }
+                current.setDate(current.getDate() + 1);
+            }
+            return days;
+        }
+
         function updateCountdown() {
             const today = new Date();
-            const targetDate = new Date(today.getFullYear(), 7, 25); // 25.8., kuukausi 0 = tammikuu
+            today.setHours(0,0,0,0);
 
-            if (today > targetDate) {
-                targetDate.setFullYear(today.getFullYear() + 1);
+            const weekdaysLeft = countWeekdaysUntil(targetDate);
+            document.getElementById("daysLeft").innerText = weekdaysLeft;
+
+            // Kuinka monta arkipäivää on mennyt 25.8.2025 alkaen
+            const startDate = new Date(2025, 7, 25); // 25.8.2025
+            let daysPassed = 0;
+            let cur = new Date(startDate);
+
+            while (cur <= today) {
+                const d = cur.getDay();
+                if (d >= 1 && d <= 5) {
+                    daysPassed++;
+                }
+                cur.setDate(cur.getDate() + 1);
             }
 
-            const diffTime = targetDate - today;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            document.getElementById("daysLeft").innerText = diffDays;
+            const quote = quotes[daysPassed - 1] || "Valmis!";
+            document.getElementById("quote").innerText = quote;
         }
 
         updateCountdown();
 
-        // Päivitä joka päivä klo 00:00
+        // Päivitä automaattisesti puolenyön jälkeen
         const now = new Date();
-        const msUntilMidnight = 
+        const msUntilMidnight =
             new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0) - now;
         setTimeout(() => {
             updateCountdown();
-            setInterval(updateCountdown, 1000 * 60 * 60 * 24); // 24h välein
+            setInterval(updateCountdown, 1000 * 60 * 60 * 24);
         }, msUntilMidnight);
     </script>
 </body>
